@@ -3,13 +3,13 @@ const scrapeBtn = document.getElementById('scrape-btn');
 const statusArea = document.getElementById('status-area');
 
 const fetchViaProxy = async (url) => {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const proxyUrl = `https://thingproxy.freeboard.io/fetch/${url}`;
     const response = await fetch(proxyUrl);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-    return data.contents;
+    const html = await response.text();
+    return html;
 };
 
 const scrapeDCInside = (html, doc) => {

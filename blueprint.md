@@ -19,13 +19,13 @@ This project is a web-based tool that allows users to scrape the text content fr
 
 3.  **JavaScript Logic:**
     *   Event listener for the "Scrape & Download" button.
-    *   Uses a public CORS proxy (`api.allorigins.win`) to fetch the HTML content of the target URL, bypassing browser security policies.
+    *   Uses a public CORS proxy (`thingproxy.freeboard.io`) to fetch the HTML content of the target URL, bypassing browser security policies.
     *   Parses the fetched HTML using the DOMParser and the Readability.js library to extract the main article content.
     *   Creates a `Blob` with the extracted text.
     *   Generates a download link for the text file and triggers the download automatically.
     *   Includes error handling and status updates for the user.
 
-## New Feature: DCInside Gallery Scraper
+## DCInside Gallery Scraper
 
 ### Plan
 
