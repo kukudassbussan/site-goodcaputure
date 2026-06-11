@@ -1,5 +1,6 @@
 :root {
     --primary-color: #3a7bfd;
+    --secondary-color: #28a745; /* For scrape button */
     --background-color: #f0f2f5;
     --card-background: #ffffff;
     --text-color: #333;
@@ -29,7 +30,8 @@ h1 {
 #bookmark-form {
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 #url-input {
@@ -40,23 +42,48 @@ h1 {
     border-radius: 8px 0 0 8px;
     font-size: 1rem;
     box-shadow: inset 0 2px 4px var(--shadow-color);
+    flex-grow: 1;
 }
 
 #bookmark-form button {
     padding: 1rem 1.5rem;
     border: none;
-    background-color: var(--primary-color);
     color: white;
-    border-radius: 0 8px 8px 0;
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 4px 6px var(--shadow-color);
     transition: background-color 0.3s, transform 0.2s;
+    white-space: nowrap;
 }
 
 #bookmark-form button:hover {
-    background-color: #2c67d3;
     transform: translateY(-2px);
+}
+
+#save-btn {
+    background-color: var(--primary-color);
+    border-radius: 0;
+}
+
+#save-btn:hover {
+     background-color: #2c67d3;
+}
+
+#scrape-btn {
+    background-color: var(--secondary-color);
+    border-radius: 0 8px 8px 0;
+}
+
+#scrape-btn:hover {
+    background-color: #218838;
+}
+
+#status-area {
+    text-align: center;
+    margin: 1rem 0 2rem 0;
+    font-weight: 500;
+    color: var(--text-color);
+    min-height: 1.5em;
 }
 
 #bookmarks-container {
@@ -64,4 +91,3 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
-

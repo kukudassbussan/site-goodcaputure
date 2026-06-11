@@ -1,31 +1,42 @@
-# Project Blueprint: Web Bookmark Manager
+# Project Blueprint: Web Bookmark & Scrape Manager
 
 ## Overview
 
-This project is a web-based bookmark manager that allows users to save and organize website URLs. The application will feature a clean, modern interface and will store data locally in the browser.
+This project is a web-based tool that allows users to save website URLs as bookmarks and to scrape the text content from a given URL for offline reading. The application features a clean, modern interface and stores bookmarks locally in the browser.
 
-## Current Plan
+## Current Features
 
-### Phase 1: Core Functionality
+### Phase 1: Core Functionality (Complete)
 
 1.  **HTML Structure:**
-    *   Create a header with the application title.
-    *   Add a form with an input field for URLs and a "Save" button.
-    *   Create a container to display the saved bookmarks.
-
+    *   Header with the application title.
+    *   Form with an input field for URLs and a "Save" button.
+    *   Container to display saved bookmarks.
 2.  **CSS Styling:**
-    *   Apply a modern design with a clean layout, good spacing, and a visually appealing color scheme.
-    *   Use CSS variables for theming.
-    *   Ensure the layout is responsive and works on mobile devices.
-    *   Add subtle shadows and textures to enhance the visual appeal.
-
+    *   Modern, responsive design with a visually appealing color scheme.
+    *   CSS variables for theming.
+    *   Subtle shadows and textures for enhanced visuals.
 3.  **JavaScript Logic:**
-    *   Create a `<bookmark-card>` Web Component to display each saved bookmark.
-        *   The component will have properties for the URL and title.
-        *   It will include a link to the saved site and a button to delete the bookmark.
-    *   Implement the logic to:
-        *   Get the URL from the input field.
-        *   Create a new bookmark object.
-        *   Save the bookmarks to `localStorage`.
-        *   Render the saved bookmarks on the page.
-        *   Handle deleting bookmarks.
+    *   A `<bookmark-card>` Web Component to display each saved bookmark with a delete button.
+    *   Bookmark data is saved to and retrieved from `localStorage`.
+
+## Current Plan: Content Scraping
+
+### Phase 2: Scraping and Downloading
+
+1.  **Update HTML:**
+    *   Add a "Scrape & Download" button to the main form.
+    *   Add a status area below the form to provide feedback to the user (e.g., "Scraping...", "Download ready!").
+
+2.  **Update CSS:**
+    *   Style the new button and status area to match the existing design.
+
+3.  **Update JavaScript:**
+    *   Implement an event listener for the "Scrape & Download" button.
+    *   Use a CORS proxy to fetch the HTML content of the URL provided by the user. This is necessary to bypass browser security policies.
+    *   Parse the fetched HTML content on the client-side.
+    *   Extract all relevant text from the body of the page.
+    *   Create a `Blob` containing the extracted text.
+    *   Generate a download link for the `Blob` as a `.txt` file and trigger the download automatically.
+    *   Display status messages to keep the user informed of the process.
+    *   Add error handling for failed requests.

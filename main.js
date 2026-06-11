@@ -31,6 +31,7 @@ class BookmarkCard extends HTMLElement {
                 font-size: 1.2rem;
                 font-weight: 600;
                 margin-bottom: 0.5rem;
+                word-break: break-all;
             }
             .delete-btn {
                 align-self: flex-end;
@@ -65,10 +66,14 @@ class BookmarkCard extends HTMLElement {
 
 customElements.define('bookmark-card', BookmarkCard);
 
+// DOM Elements
 const form = document.getElementById('bookmark-form');
 const urlInput = document.getElementById('url-input');
 const bookmarksContainer = document.getElementById('bookmarks-container');
+const scrapeBtn = document.getElementById('scrape-btn');
+const statusArea = document.getElementById('status-area');
 
+// Bookmarks
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
 const saveBookmarks = () => {
@@ -90,18 +95,73 @@ const renderBookmarks = () => {
     });
 };
 
+// Event Listeners
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const url = urlInput.value;
+    const url = urlInput.value.trim();
     if (url) {
-        // For simplicity, we'll use the URL as the title for now.
         const newBookmark = { link: url, title: url };
-        bookmarks.push(newBookmark);
-        saveBookmarks();
-        renderBookmarks();
+        if (!bookmarks.some(b => b.link === url)) {
+            bookmarks.push(newBookmark);
+            saveBookmarks();
+            renderBookmarks();
+        }
         urlInput.value = '';
     }
 });
 
-// Initial render
+scrapeBtn.addEventListener('click', async () => {
+    const url = urlInput.value.trim();
+    if (!url) {
+        statusArea.textContent = 'Please enter a URL to scrape.';
+        return;
+    }
+
+    statusArea.textContent = 'Scraping... please wait.';
+
+    // Using a public CORS proxy
+    const proxyUrl = `https://cors-anywhere.herokuapp.com/${url}`;
+
+    try {
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const html = await response.text();
+        
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Attempt to get a meaningful title
+        const title = doc.querySelector('h1')?.innerText || doc.title || url.split('/').slice(0,3).join('/');
+
+        // Extract text content
+        const reader = new readability.Readability(doc);
+        const article = reader.parse();
+        const content = article ? article.textContent : doc.body.innerText;
+
+        if (!content) {
+            throw new Error('Could not extract any content.');
+        }
+
+        // Create and download the file
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+
+        statusArea.textContent = 'Scraping and download complete!';
+    } catch (error) {
+        console.error('Scraping failed:', error);
+        statusArea.textContent = `Failed to scrape content. ${error.message}`;
+    }
+});
+
+
+// Initial Render
 renderBookmarks();
